@@ -1,0 +1,38 @@
+import csv
+
+
+def read_workbook_columns(wb):
+	""" Returns a list of columns for the specified csv workbook. """
+	with open(wb) as fh:
+		csv_reader = csv.reader(fh, delimiter=',')
+		columns = csv_reader[0]
+
+	return columns
+
+
+def read_workbook_data(wb):
+	"""
+	Returns the specified csv workbook's data as an array of objects
+	using the header columns as the keys.
+	"""
+	line_count = 0
+	header_columns = []
+	data = []
+
+	with open(wb) as fh:
+		csv_reader = csv.reader(fh, delimiter=',')
+		for row in csv_reader:
+			if line_count == 0:
+				header_columns = row
+				line_count += 1
+				continue
+
+			obj = {}
+			for col in range(len(header_columns)):
+				value = row[col].strip()
+				obj[header_columns[col]] = value
+
+			data.append(obj)
+			line_count += 1
+
+	return data
