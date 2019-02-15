@@ -3,11 +3,16 @@ import csv
 
 def read_workbook_columns(wb):
 	""" Returns a list of columns for the specified csv workbook. """
+	line_count = 0
+	header_columns = []
 	with open(wb) as fh:
 		csv_reader = csv.reader(fh, delimiter=',')
-		columns = csv_reader[0]
+		for row in csv_reader:
+			if line_count == 0:
+				header_columns = row
+				break
 
-	return columns
+	return header_columns
 
 
 def read_workbook_data(wb):
@@ -27,12 +32,12 @@ def read_workbook_data(wb):
 				line_count += 1
 				continue
 
-			obj = {}
+			item = []
 			for col in range(len(header_columns)):
 				value = row[col].strip()
-				obj[header_columns[col]] = value
+				item.append(value)
 
-			data.append(obj)
+			data.append(item)
 			line_count += 1
 
 	return data
