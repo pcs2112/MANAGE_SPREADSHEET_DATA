@@ -35,6 +35,8 @@ def process_yaml_data(file):
 	calculate_insert_count = 0
 	calculate_update_count = 0
 	error_count = 0
+	
+	print(f"Processing ...")
 
 	for key in yaml_data.keys():
 		tmp_item = yaml_data[key]
