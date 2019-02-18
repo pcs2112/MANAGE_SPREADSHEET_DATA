@@ -25,6 +25,7 @@ def process_spreadsheet_data(file):
 
 	filename = ntpath.basename(file)
 	filepath = ntpath.dirname(file)
+	total = 0
 	insert_count = 0
 	update_count = 0
 	error_count = 0
@@ -51,6 +52,8 @@ def process_spreadsheet_data(file):
 
 			result_count = len(result)
 			processed = result[result_count - 1][0][0]
+			
+			total += 1
 
 			if processed == 1:
 				insert_count += 1
@@ -63,7 +66,7 @@ def process_spreadsheet_data(file):
 	close()
 
 	print("")
-	print(f"TOTAL: {format_number(insert_count + update_count + error_count)}")
+	print(f"TOTAL: {format_number(total)}")
 	print(f"INSERT COUNT: {format_number(insert_count)}")
 	print(f"UPDATE COUNT: {format_number(update_count)}")
 	print(f"ERROR COUNT: {format_number(error_count)}")
