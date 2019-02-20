@@ -5,7 +5,7 @@ def read_workbook_columns(wb):
 	""" Returns a list of columns for the specified csv workbook. """
 	line_count = 0
 	header_columns = []
-	with open(wb) as fh:
+	with open(wb, mode='r', encoding='utf-8-sig') as fh:
 		csv_reader = csv.reader(fh, delimiter=',')
 		for row in csv_reader:
 			if line_count == 0:
@@ -24,7 +24,7 @@ def read_workbook_data(wb):
 	header_columns = []
 	data = []
 
-	with open(wb) as fh:
+	with open(wb, mode='r', encoding='utf-8-sig') as fh:
 		csv_reader = csv.reader(fh, delimiter=',')
 		for row in csv_reader:
 			if line_count == 0:
