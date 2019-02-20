@@ -35,10 +35,20 @@ def process_spreadsheet_data(file):
 
 	# CSV file rows
 	rows = read_workbook_data(file)
-
-	print(f"Processing ...")
+	
+	totals_rows = len(rows)
+	row_limit_display = 100
 
 	for row_num, row in enumerate(rows):
+		curr_row = row_num + 1
+		to_row = row_num + row_limit_display
+		
+		if to_row >= totals_rows:
+			to_row = totals_rows
+			
+		if row_num % row_limit_display == 0:
+			print(f"Processing row {format_number(curr_row)} - {format_number(to_row)} of {format_number(totals_rows)}...")
+		
 		for col_pos, col in enumerate(columns):
 			result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
 				'message': 'SAVE',
