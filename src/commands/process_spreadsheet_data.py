@@ -6,7 +6,7 @@ from src.mssql_connection import init_db, close, execute_sp
 from src.utils import format_number
 
 
-def process_spreadsheet_data(file):
+def process_spreadsheet_data(file, start_at=1, row_limit_display=100):
 	if os.path.exists(file) is False:
 		raise FileExistsError(f"{file} is an invalid file.")
 
@@ -37,11 +37,13 @@ def process_spreadsheet_data(file):
 	rows = read_workbook_data(file)
 	
 	totals_rows = len(rows)
-	row_limit_display = 100
 
 	for row_num, row in enumerate(rows):
 		curr_row = row_num + 1
 		to_row = row_num + row_limit_display
+		
+		if curr_row < start_at:
+			continue
 		
 		if to_row >= totals_rows:
 			to_row = totals_rows
