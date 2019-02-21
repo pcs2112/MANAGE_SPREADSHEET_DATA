@@ -6,7 +6,7 @@ from src.mssql_connection import init_db, close, execute_sp
 from src.utils import format_number
 
 
-def process_spreadsheet_data(file, start_at=1, row_limit_display=100):
+def process_spreadsheet_data(file, resume='', row_limit_display=100):
 	if os.path.exists(file) is False:
 		raise FileExistsError(f"{file} is an invalid file.")
 
@@ -25,6 +25,20 @@ def process_spreadsheet_data(file, start_at=1, row_limit_display=100):
 
 	filename = ntpath.basename(file)
 	filepath = ntpath.dirname(file)
+
+	start_at = 1
+	if resume != '':
+		start_at_result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
+			'message': 'GET_LAST_ROW',
+			'PATH': filepath,
+			'FILE_NAME': filename,
+			'COLUMN_NAME': '',
+			'COLUMN_POSITION': '',
+			'ROW_NUMBER': '',
+			'VALUE': ''
+		}, 'RETURN_FLG')
+		start_at = start_at_result[0][0]['last_row']
+
 	total = 0
 	insert_count = 0
 	update_count = 0
@@ -35,22 +49,22 @@ def process_spreadsheet_data(file, start_at=1, row_limit_display=100):
 
 	# CSV file rows
 	rows = read_workbook_data(file)
-	
+
 	totals_rows = len(rows)
 
 	for row_num, row in enumerate(rows):
 		curr_row = row_num + 1
 		to_row = row_num + row_limit_display
-		
+
 		if curr_row < start_at:
 			continue
-		
+
 		if to_row >= totals_rows:
 			to_row = totals_rows
-			
+
 		if row_num % row_limit_display == 0:
 			print(f"Processing row {format_number(curr_row)} - {format_number(to_row)} of {format_number(totals_rows)}...")
-		
+
 		for col_pos, col in enumerate(columns):
 			result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
 				'message': 'SAVE',
@@ -62,9 +76,8 @@ def process_spreadsheet_data(file, start_at=1, row_limit_display=100):
 				'VALUE': row[col_pos]
 			}, 'RETURN_FLG')
 
-			result_count = len(result)
-			processed = result[result_count - 1][0][0]
-			
+			processed = result[len(result) - 1][0][0]
+
 			total += 1
 
 			if processed == 1:
