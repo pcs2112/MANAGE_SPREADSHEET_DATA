@@ -3,12 +3,14 @@ import ntpath
 from src.config import get_config
 from src.csv_utils import read_workbook_columns, read_workbook_data
 from src.mssql_connection import init_db, close, execute_sp
-from src.utils import format_number
+from src.utils import format_number, get_now_datetime
 
 
 def process_spreadsheet_data(file, resume='', row_limit_display=100):
 	if os.path.exists(file) is False:
 		raise FileExistsError(f"{file} is an invalid file.")
+	
+	print('')
 
 	# Init DB connection
 	config = get_config()
@@ -63,7 +65,7 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 			to_row = totals_rows
 
 		if row_num % row_limit_display == 0:
-			print(f"Processing row {format_number(curr_row)} - {format_number(to_row)} of {format_number(totals_rows)}...")
+			print(f"{get_now_datetime()}: processing rows {format_number(curr_row)} to {format_number(to_row)} of {format_number(totals_rows)}")
 
 		for col_pos, col in enumerate(columns):
 			result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
