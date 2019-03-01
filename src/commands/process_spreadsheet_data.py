@@ -44,6 +44,7 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 	total = 0
 	insert_count = 0
 	update_count = 0
+	null_count = 0
 	error_count = 0
 
 	# CSV file columns
@@ -86,6 +87,8 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 				insert_count += 1
 			elif processed == 2:
 				update_count += 1
+			elif processed == 3:
+				null_count += 1
 			else:
 				error_count += 1
 
@@ -96,4 +99,5 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 	print(f"TOTAL: {format_number(total)}")
 	print(f"INSERT COUNT: {format_number(insert_count)}")
 	print(f"UPDATE COUNT: {format_number(update_count)}")
+	print(f"NULL COUNT: {format_number(null_count)}")
 	print(f"ERROR COUNT: {format_number(error_count)}")
