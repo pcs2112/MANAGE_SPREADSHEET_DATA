@@ -18,7 +18,7 @@ config = {
 	'DB_USER': os.getenv('DB_USER'),
 	'DB_PASSWORD': os.getenv('DB_PASSWORD'),
 	'DB_DRIVER': os.getenv('DB_DRIVER'),
-	'DB_TRUSTED_CONNECTION': os.getenv('DB_TRUSTED_CONNECTION') == 1,
+	'DB_TRUSTED_CONNECTION': os.getenv('DB_TRUSTED_CONNECTION') == '1',
 	'ROOT_DIR': ROOT_DIR,
 	'IN_DIR': IN_DIR
 }
