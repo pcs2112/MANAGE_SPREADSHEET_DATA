@@ -9,7 +9,7 @@ from src.utils import format_number, get_now_datetime
 def process_spreadsheet_data(file, resume='', row_limit_display=100):
 	if os.path.exists(file) is False:
 		raise FileExistsError(f"{file} is an invalid file.")
-	
+
 	print('')
 
 	# Init DB connection
@@ -69,17 +69,21 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 			print(f"{get_now_datetime()}: processing rows {format_number(curr_row)} to {format_number(to_row)} of {format_number(totals_rows)}")
 
 		for col_pos, col in enumerate(columns):
-			result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
-				'message': 'SAVE',
-				'PATH': filepath,
-				'FILE_NAME': filename,
-				'COLUMN_NAME': col,
-				'COLUMN_POSITION': str(col_pos + 1),
-				'ROW_NUMBER': str(row_num + 1),
-				'VALUE': row[col_pos]
-			}, 'RETURN_FLG')
+			value = row[col_pos]
+			if value.lower() == 'null':
+				processed = 3
+			else:
+				result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {
+					'message': 'SAVE',
+					'PATH': filepath,
+					'FILE_NAME': filename,
+					'COLUMN_NAME': col,
+					'COLUMN_POSITION': str(col_pos + 1),
+					'ROW_NUMBER': str(row_num + 1),
+					'VALUE': value
+				}, 'RETURN_FLG')
 
-			processed = result[len(result) - 1][0][0]
+				processed = result[len(result) - 1][0][0]
 
 			total += 1
 
