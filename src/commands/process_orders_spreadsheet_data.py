@@ -1,17 +1,21 @@
 import os
 import csv
+
 from src.config import get_config
 from src.excel_utils import read_workbook, read_workbook_data
 
 
-def process_orders_spreadsheet_data(file, prefix='dan', sheet=0):
+def process_orders_spreadsheet_data(file, prefix='i-dan', seq=1, sheet=0):
     if os.path.exists(file) is False:
         raise FileExistsError(f"{file} is an invalid file.")
-    
+
+    seq = int(seq)
+    sheet = int(sheet)
+
     print('')
 
     config = get_config()
-   
+
     wb = read_workbook(file)
     
     rows = read_workbook_data(wb, sheet)
@@ -26,9 +30,11 @@ def process_orders_spreadsheet_data(file, prefix='dan', sheet=0):
             if curr_batch is not None:
                 batches.append(curr_batch.copy())
                 
-            curr_batch_index = curr_batch_index + 1
-            batch_idx[curr_batch_index] = int(row['SKU'])
+            curr_batch_index += 1
+            batch_idx[curr_batch_index] = seq
             curr_batch = [['SKU', 'QTY']]
+
+            seq += 1
             continue
         
         curr_batch.append([int(row['SKU']), round(row['QTY'])])
