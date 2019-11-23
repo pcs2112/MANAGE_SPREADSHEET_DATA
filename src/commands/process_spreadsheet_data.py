@@ -70,7 +70,8 @@ def process_spreadsheet_data(file, resume='', row_limit_display=100):
 
 		for col_pos, col in enumerate(columns):
 			value = row[col_pos]
-			if value.lower() == 'null':
+			value_norm = value.lower()
+			if  value_norm == 'null' or value_norm == 'PrivacySuppressed':
 				processed = 3
 			else:
 				result = execute_sp('MWH_FILES.MANAGE_CSV_DATA', {

@@ -43,6 +43,9 @@ def process_yaml_data(file):
 		if 'type' not in tmp_item:
 			tmp_item['type'] = 'unknown'
 
+		if 'description' not in tmp_item:
+			tmp_item['description'] = 'N/A'
+
 		items = []
 		if 'calculate' in tmp_item:
 			sources = tmp_item['calculate'].split(' or ')
