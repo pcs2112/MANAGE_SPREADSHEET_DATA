@@ -11,6 +11,9 @@ load_dotenv(dotenv_path)
 # Source IN dir
 IN_DIR = os.path.join(ROOT_DIR, 'in')
 
+# Source OUT dir
+OUT_DIR = os.path.join(ROOT_DIR, 'out')
+
 # Set the settings
 config = {
 	'DB_SERVER': os.getenv('DB_HOST'),
@@ -20,7 +23,8 @@ config = {
 	'DB_DRIVER': os.getenv('DB_DRIVER'),
 	'DB_TRUSTED_CONNECTION': os.getenv('DB_TRUSTED_CONNECTION') == '1',
 	'ROOT_DIR': ROOT_DIR,
-	'IN_DIR': IN_DIR
+	'IN_DIR': IN_DIR,
+	'OUT_DIR': OUT_DIR
 }
 
 
